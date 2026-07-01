@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ToyOraKids Blog - Articles about parenting, Montessori toys, and organic kids' clothing.">
+  <title>Blog | ToyOraKids</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        ToyOraKids <span class="logo-dot"></span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="View Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-badge" style="display: none;">0</span>
+        </a>
+        <button class="icon-btn cart-toggle-btn" title="Open Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-badge" style="display: none;">0</span>
+        </button>
+        <button class="icon-btn mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="section" style="border-top: none; padding-top: 3rem; padding-bottom: 2rem;">
+    <div class="container" style="text-align: center;">
+      <span class="label-mono">Our Journal</span>
+      <h1 class="display-title" style="font-size: 3rem; margin-bottom: 1rem;">The Playbook</h1>
+      <p class="text-muted" style="max-width: 600px; margin: 0 auto;">Insights on child development, organic materials, and styling the little ones for comfort and exploration.</p>
+    </div>
+  </section>
+
+  <!-- BLOG GRID -->
+  <section class="section" style="padding-top: 1rem;">
+    <div class="container">
+      <div class="blog-grid" id="blog-posts-grid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">ToyOraKids <span class="logo-dot"></span></a>
+          <p class="text-muted" style="font-size: 0.85rem; max-width: 250px;">Premium children's garments and Montessori toys designed to provide comfort, style, and developmental growth.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="shop.html">Shop All</a></li>
+            <li><a href="shop.html?category=garment">Garments</a></li>
+            <li><a href="shop.html?category=toy">Developmental Toys</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Admin Portal</h4>
+          <ul>
+            <li><a href="admin.html">Dashboard Login</a></li>
+            <li><a href="admin.html">Manage Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support & Contact</h4>
+          <ul>
+            <li><a href="https://wa.me/923001234567" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 0.4rem;"></i>0300-1234567</a></li>
+            <li><a href="mailto:support@toyorakids.com"><i class="far fa-envelope" style="margin-right: 0.4rem;"></i>support@toyorakids.com</a></li>
+            <li><p class="text-muted" style="font-size: 0.85rem;">Islamabad, Pakistan</p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ToyOraKids. All rights reserved. Crafted with the Linear design system.</p>
+        <p>All prices in PKR (Rs.)</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const postsStr = localStorage.getItem('toyorakids_blog_posts');
+      let posts = [];
+      if (postsStr) {
+        posts = JSON.parse(postsStr);
+      } else {
+        // Fallback default posts
+        posts = [
+          {
+            id: 'post-1',
+            title: 'Why Organic Cotton Matters for Baby Skin',
+            category: 'Materials',
+            excerpt: 'Understanding the benefits of GOTS-certified organic cotton over synthetic blends for sensitive young skin.',
+            date: new Date().toISOString(),
+            author: 'Sarah Khan',
+            img: 'images/products/knit_sweater.png',
+            content: 'Full content goes here...'
+          }
+        ];
+        localStorage.setItem('toyorakids_blog_posts', JSON.stringify(posts));
+      }
+
+      const grid = document.getElementById('blog-posts-grid');
+      
+      if (posts.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 4rem; color: var(--foreground-muted);">No blog posts published yet.</div>';
+        return;
+      }
+
+      let html = '';
+      posts.reverse().forEach(post => {
+        const dateStr = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const imgHtml = post.img 
+          ? `<img src="${post.img}" alt="${post.title}" class="blog-card-img">`
+          : `<div class="blog-card-img-placeholder"><i class="fas fa-image"></i></div>`;
+          
+        html += `
+          <a href="blog-post.html?id=${post.id}" class="blog-card">
+            ${imgHtml}
+            <div class="blog-card-body">
+              <div class="blog-card-category">${post.category}</div>
+              <h3 class="blog-card-title">${post.title}</h3>
+              <p class="blog-card-excerpt">${post.excerpt}</p>
+              <div class="blog-card-meta">
+                <span>By ${post.author}</span>
+                <span>${dateStr}</span>
+              </div>
+            </div>
+          </a>
+        `;
+      });
+      grid.innerHTML = html;
+    });
+  </script>
+</body>
+</html>

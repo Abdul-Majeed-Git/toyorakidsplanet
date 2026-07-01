@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View items you have saved to your wishlist. Add them directly to your cart when ready.">
+  <title>Your Wishlist | ToyOraKids</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        ToyOraKids <span class="logo-dot"></span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="wishlist.html" class="active">Wishlist</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="View Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-badge" style="display: none;">0</span>
+        </a>
+        <button class="icon-btn cart-toggle-btn" title="Open Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-badge" style="display: none;">0</span>
+        </button>
+        <button class="icon-btn mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- WISHLIST CONTENT -->
+  <section class="section" style="border-top: none; padding-top: 3rem;">
+    <div class="container wishlist-layout">
+      <span class="label-mono">My Account</span>
+      <h1 class="display-title" style="font-size: 3.5rem; margin-bottom: 0.5rem;">Your Wishlist</h1>
+      <p class="text-muted" style="margin-bottom: 2rem;">Products you've bookmarked for later. Quickly add them to cart or remove them anytime.</p>
+
+      <!-- Wishlist Grid populated by app.js -->
+      <div class="wishlist-grid" id="wishlist-grid">
+        <!-- Rendered items go here -->
+      </div>
+
+      <!-- Empty Fallback -->
+      <div class="wishlist-empty" id="wishlist-empty" style="display: none;">
+        <i class="far fa-heart" style="font-size: 3.5rem; color: var(--foreground-subtle);"></i>
+        <h2 style="font-size: 1.5rem; color: var(--foreground);">Your wishlist is empty</h2>
+        <p class="text-muted" style="max-width: 400px; margin: 0 auto;">Browse our premium baby garments and developmental toys, and click the heart icon on any card to save it here.</p>
+        <a href="shop.html" class="btn btn-primary">Go to Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">ToyOraKids <span class="logo-dot"></span></a>
+          <p class="text-muted" style="font-size: 0.85rem; max-width: 250px;">Premium children's garments and Montessori toys designed to provide comfort, style, and developmental growth.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="shop.html">Shop All</a></li>
+            <li><a href="shop.html?category=garment">Garments</a></li>
+            <li><a href="shop.html?category=toy">Developmental Toys</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Admin Portal</h4>
+          <ul>
+            <li><a href="admin.html">Dashboard Login</a></li>
+            <li><a href="admin.html">Manage Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support & Contact</h4>
+          <ul>
+            <li><a href="https://wa.me/923001234567" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 0.4rem;"></i>0300-1234567</a></li>
+            <li><a href="mailto:support@toyorakids.com"><i class="far fa-envelope" style="margin-right: 0.4rem;"></i>support@toyorakids.com</a></li>
+            <li><p class="text-muted" style="font-size: 0.85rem;">Islamabad, Pakistan</p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ToyOraKids. All rights reserved. Crafted with the Linear design system.</p>
+        <p>All prices in PKR (Rs.)</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

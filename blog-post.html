@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Post | ToyOraKids</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        ToyOraKids <span class="logo-dot"></span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="View Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-badge" style="display: none;">0</span>
+        </a>
+        <button class="icon-btn cart-toggle-btn" title="Open Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-badge" style="display: none;">0</span>
+        </button>
+        <button class="icon-btn mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SINGLE POST -->
+  <section class="section" style="border-top: none; padding-top: 2rem;">
+    <div class="container blog-post-layout">
+      
+      <a href="blog.html" style="color: var(--accent); text-decoration: none; font-size: 0.9rem; margin-bottom: 2rem; display: inline-block;">
+        <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Back to all posts
+      </a>
+
+      <div id="post-header" style="margin-bottom: 2.5rem;">
+        <div id="post-category" class="label-mono" style="color: var(--accent); margin-bottom: 1rem;">Category</div>
+        <h1 id="post-title" class="display-title" style="font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.3;">Loading Post...</h1>
+        <div style="display: flex; gap: 1.5rem; color: var(--foreground-muted); font-size: 0.9rem; font-family: var(--font-mono);">
+          <span>By <span id="post-author" style="color: var(--foreground);">Author</span></span>
+          <span id="post-date">Date</span>
+        </div>
+      </div>
+
+      <img id="post-hero-img" src="" alt="" class="blog-post-hero-img" style="display: none;">
+
+      <div id="post-content" class="blog-post-content">
+        <!-- Content injected by JS -->
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 ToyOraKids. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id');
+      
+      if (!postId) {
+        document.getElementById('post-title').textContent = 'Post Not Found';
+        return;
+      }
+
+      const postsStr = localStorage.getItem('toyorakids_blog_posts');
+      if (postsStr) {
+        const posts = JSON.parse(postsStr);
+        const post = posts.find(p => p.id === postId);
+        
+        if (post) {
+          document.title = `${post.title} | ToyOraKids Blog`;
+          document.getElementById('post-category').textContent = post.category;
+          document.getElementById('post-title').textContent = post.title;
+          document.getElementById('post-author').textContent = post.author || 'Admin';
+          
+          const dateStr = new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+          document.getElementById('post-date').textContent = dateStr;
+          
+          if (post.img) {
+            const imgEl = document.getElementById('post-hero-img');
+            imgEl.src = post.img;
+            imgEl.alt = post.title;
+            imgEl.style.display = 'block';
+          }
+          
+          document.getElementById('post-content').innerHTML = post.content.replace(/\n/g, '<br>');
+        } else {
+          document.getElementById('post-title').textContent = 'Post Not Found';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

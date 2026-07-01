@@ -1,0 +1,12 @@
+{
+  "name": "toyorakids-estore",
+  "version": "1.0.0",
+  "description": "ToyOraKids premium full-stack e-commerce store with Linear design system",
+  "main": "api/products.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

@@ -1,0 +1,57 @@
+# ToyOraKids - Project Context & Implementation Summary
+
+## 1. Project Overview
+ToyOraKids is a premium e-commerce website for children's garments and Montessori toys. The website is designed with a modern, high-end aesthetic (glassmorphism, dark mode accents, bento grids) and processes orders directly via a WhatsApp checkout integration.
+
+## 2. Tech Stack & Architecture
+- **Frontend:** Pure HTML5, CSS3 (Vanilla), and Vanilla JavaScript (ES6). No heavy frameworks.
+- **Backend/State Management:** Fully serverless architecture for the frontend demo. All database operations and user sessions are heavily mocked and persisted using the browser's `localStorage`.
+- **Styling:** Custom CSS with robust CSS variables for theming, completely responsive design utilizing CSS Grid and Flexbox.
+
+## 3. Core Features Implemented
+
+### A. Shopping Experience
+- Interactive product catalog with filtering (Garments vs Toys), search, and sorting.
+- Add to Cart & Wishlist functionalities with dynamic badges.
+- Cart Side-Drawer for quick review.
+- WhatsApp Checkout system that formats the cart items into a detailed WhatsApp message sent to the store admin.
+
+### B. User Authentication & Tracking (`js/auth.js`)
+- **One-Time Login:** A side drawer prompts the user for their Name and Email exactly once on their first visit.
+- **Session Persistence:** User data is saved in `localStorage` under `toyorakids_user`.
+- **Visit Tracking:** Every page visit is tracked (Timestamp, Page Name, User Info/Anonymous Session ID) and saved locally.
+
+### C. Advanced Admin Dashboard (`admin.html`)
+The admin panel is protected by a simple passcode (default: `admin123`) and utilizes a Tabbed Interface:
+1. **Products:** Add, edit, and delete products (saved locally if the cloud API fails).
+2. **About Page Editor:** Allows the admin to dynamically upload images (Hero, Mission, Store Location) and edit text for the About page.
+3. **Blog Manager:** Allows the admin to write, add cover images, and publish new blog posts.
+4. **Visitor History:** A data table displaying a chronological log of all tracked user visits across the site.
+5. **Statistics:** Graphical and numeric representations of total views, unique visitors, registered profiles, and top performing pages.
+
+### D. Dynamic Pages
+- **About Page (`about.html`):** Loads its content entirely from `localStorage` based on what the admin sets in the dashboard.
+- **Blog System (`blog.html` & `blog-post.html`):** Renders a grid of published articles and individual post views based on the data saved by the Admin Blog Manager.
+
+## 4. LocalStorage Database Keys Reference
+If you need to clear the database or debug, here are the keys used in `localStorage`:
+- `toyorakids_cart` - User's shopping cart items.
+- `toyorakids_wishlist` - Array of product IDs favorited by the user.
+- `toyorakids_admin_products` - Custom products added via the admin panel.
+- `toyorakids_user` - Logged in user profile data.
+- `toyorakids_prompted` - Boolean flag to prevent showing the login drawer more than once.
+- `toyorakids_visits` - Array of all tracked page visits.
+- `toyorakids_about_data` - JSON object containing the texts and base64 images for the About page.
+- `toyorakids_blog_posts` - Array of blog post objects.
+- `sessionStorage.toyorakids_session_id` - Temporary anonymous visitor ID.
+- `sessionStorage.toyorakids_admin_session` - Admin login state.
+
+## 5. Where We Left Off
+- The complete integration of the Admin Dashboard tabs, Blog system, Editable About Page, and User Visit tracking has been successfully finished.
+- All HTML navigation menus have been updated to link to the new About and Blog pages.
+- `auth.js` has been injected into all pages.
+
+**Next Steps / Future Enhancements:**
+- Next time you start working, you can read this file to instantly understand the structure.
+- Future work could include moving the `localStorage` data to a real backend (e.g., Firebase, Supabase, or a Node.js REST API).
+- Adding actual image hosting instead of saving Base64 strings to localStorage (to avoid quota limits).

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About ToyOraKids - Our brand story, mission, and team.">
+  <title>About Us | ToyOraKids</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        ToyOraKids <span class="logo-dot"></span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="View Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-badge" style="display: none;">0</span>
+        </a>
+        <button class="icon-btn cart-toggle-btn" title="Open Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-badge" style="display: none;">0</span>
+        </button>
+        <button class="icon-btn mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT HERO -->
+  <section class="about-hero container">
+    <img src="images/products/knit_sweater.png" alt="ToyOraKids Storefront" id="about-hero-img" class="about-hero-image">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+      <span class="label-mono">Our Story</span>
+      <h1 class="display-title" style="font-size: 3.5rem; margin-bottom: 1.5rem;" id="about-hero-title">Crafting Comfort & Joy for the Next Generation</h1>
+      <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;" id="about-hero-desc">
+        Founded in 2026, ToyOraKids started with a simple vision: to provide premium, safe, and developmentally nurturing garments and toys for children. We believe in the power of organic materials and Montessori-inspired play to shape young minds.
+      </p>
+    </div>
+  </section>
+
+  <!-- MISSION SECTION -->
+  <section class="section">
+    <div class="container about-section-grid">
+      <div class="about-text-block">
+        <span class="label-mono">Mission & Values</span>
+        <h2 id="about-mission-title">Engineered for Young Minds & Skin</h2>
+        <p class="text-muted" style="margin-bottom: 1.5rem;" id="about-mission-desc1">
+          Our garments are crafted from 100% organic, GOTS-certified long-staple cotton and linen, protecting sensitive skins from harsh chemicals and pesticides while ensuring breathable comfort all day long.
+        </p>
+        <p class="text-muted" id="about-mission-desc2">
+          Alongside our apparel, our toys are developed with child psychologists to foster active spatial reasoning, logical planning, and motor coordination. Every piece is a step towards healthy growth.
+        </p>
+      </div>
+      <div class="about-img-block">
+        <img src="images/products/stacking_rings.png" alt="Our Mission" id="about-mission-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM & LOCATION -->
+  <section class="section">
+    <div class="section-accent-line"></div>
+    <div class="container">
+      <div style="margin-bottom: 4rem;">
+        <span class="label-mono">Leadership</span>
+        <h2 class="section-title">Meet the Founders</h2>
+        
+        <div class="about-team-grid" id="about-team-grid">
+          <!-- Dynamic Team Cards inserted here by JS -->
+        </div>
+      </div>
+
+      <div style="margin-top: 6rem;">
+        <span class="label-mono">Visit Us</span>
+        <h2 class="section-title">Our Store Location</h2>
+        
+        <div class="about-location-card">
+          <img src="images/products/denim_dungaree.png" alt="Store Location" class="about-location-img" id="about-location-img">
+          <div>
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;" id="about-store-name">ToyOraKids Flagship Store</h3>
+            <p class="text-muted" style="margin-bottom: 1.5rem;" id="about-store-address">
+              123 Premium Avenue, Blue Area<br>
+              Islamabad, Pakistan 44000
+            </p>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <i class="fab fa-whatsapp" style="font-size: 1.5rem; color: #2ECC71;"></i>
+              <span id="about-store-phone" style="font-family: var(--font-mono);">+92 300 1234567</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">ToyOraKids <span class="logo-dot"></span></a>
+          <p class="text-muted" style="font-size: 0.85rem; max-width: 250px;">Premium children's garments and Montessori toys designed to provide comfort, style, and developmental growth.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="shop.html">Shop All</a></li>
+            <li><a href="shop.html?category=garment">Garments</a></li>
+            <li><a href="shop.html?category=toy">Developmental Toys</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Admin Portal</h4>
+          <ul>
+            <li><a href="admin.html">Dashboard Login</a></li>
+            <li><a href="admin.html">Manage Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support & Contact</h4>
+          <ul>
+            <li><a href="https://wa.me/923001234567" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 0.4rem;"></i>0300-1234567</a></li>
+            <li><a href="mailto:support@toyorakids.com"><i class="far fa-envelope" style="margin-right: 0.4rem;"></i>support@toyorakids.com</a></li>
+            <li><p class="text-muted" style="font-size: 0.85rem;">Islamabad, Pakistan</p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ToyOraKids. All rights reserved. Crafted with the Linear design system.</p>
+        <p>All prices in PKR (Rs.)</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load custom about data if saved by admin
+      const aboutDataStr = localStorage.getItem('toyorakids_about_data');
+      if (aboutDataStr) {
+        const data = JSON.parse(aboutDataStr);
+        
+        if (data.heroImg) document.getElementById('about-hero-img').src = data.heroImg;
+        if (data.heroTitle) document.getElementById('about-hero-title').textContent = data.heroTitle;
+        if (data.heroDesc) document.getElementById('about-hero-desc').textContent = data.heroDesc;
+        
+        if (data.missionImg) document.getElementById('about-mission-img').src = data.missionImg;
+        if (data.missionTitle) document.getElementById('about-mission-title').textContent = data.missionTitle;
+        if (data.missionDesc1) document.getElementById('about-mission-desc1').textContent = data.missionDesc1;
+        if (data.missionDesc2) document.getElementById('about-mission-desc2').textContent = data.missionDesc2;
+        
+        if (data.locationImg) document.getElementById('about-location-img').src = data.locationImg;
+        if (data.storeName) document.getElementById('about-store-name').textContent = data.storeName;
+        if (data.storeAddress) document.getElementById('about-store-address').innerHTML = data.storeAddress.replace(/\n/g, '<br>');
+        if (data.storePhone) document.getElementById('about-store-phone').textContent = data.storePhone;
+      }
+
+      // Render team
+      const teamDataStr = localStorage.getItem('toyorakids_team_data');
+      let teamMembers = [];
+      if (teamDataStr) {
+        teamMembers = JSON.parse(teamDataStr);
+      } else {
+        // Default team
+        teamMembers = [
+          { name: "Ali Ahmed", role: "Founder & CEO", img: "" },
+          { name: "Sarah Khan", role: "Head of Design", img: "" },
+          { name: "Zainab Ali", role: "Child Psychologist", img: "" }
+        ];
+      }
+
+      const teamGrid = document.getElementById('about-team-grid');
+      let teamHtml = '';
+      teamMembers.forEach(member => {
+        const avatarHtml = member.img 
+          ? `<img src="${member.img}" alt="${member.name}" class="team-card-img">`
+          : `<div class="team-card-avatar">${member.name.charAt(0)}</div>`;
+          
+        teamHtml += `
+          <div class="team-card spotlight-card">
+            ${avatarHtml}
+            <div class="team-card-name">${member.name}</div>
+            <div class="team-card-role">${member.role}</div>
+          </div>
+        `;
+      });
+      teamGrid.innerHTML = teamHtml;
+    });
+  </script>
+</body>
+</html>
