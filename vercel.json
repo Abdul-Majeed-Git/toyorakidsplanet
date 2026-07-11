@@ -6,10 +6,27 @@
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,DELETE,PATCH,POST,PUT,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+        { "key": "Access-Control-Allow-Origin",      "value": "*" },
+        { "key": "Access-Control-Allow-Methods",     "value": "GET,DELETE,PATCH,POST,PUT,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers",     "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Cookie" },
+        { "key": "X-Frame-Options",                  "value": "DENY" },
+        { "key": "X-Content-Type-Options",           "value": "nosniff" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/api/products",              "destination": "/api/products" },
+    { "source": "/api/orders",                "destination": "/api/orders" },
+    { "source": "/api/wishlist",              "destination": "/api/wishlist" },
+    { "source": "/api/auth/register",         "destination": "/api/auth/register" },
+    { "source": "/api/auth/login",            "destination": "/api/auth/login" },
+    { "source": "/api/auth/logout",           "destination": "/api/auth/logout" },
+    { "source": "/api/auth/session",          "destination": "/api/auth/session" },
+    { "source": "/api/auth/verify-email",     "destination": "/api/auth/verify-email" },
+    { "source": "/api/auth/forgot-password",  "destination": "/api/auth/forgot-password" },
+    { "source": "/api/auth/reset-password",   "destination": "/api/auth/reset-password" },
+    { "source": "/api/auth/change-password",  "destination": "/api/auth/change-password" },
+    { "source": "/api/auth/profile",          "destination": "/api/auth/profile" },
+    { "source": "/api/auth/users",            "destination": "/api/auth/users" }
   ]
 }

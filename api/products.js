@@ -1,10 +1,12 @@
 const { supabase } = require('./db');
+const { getSessionUser, hasRole, ROLES, logAudit } = require('./helpers/auth');
 
 module.exports = async (req, res) => {
-  // Enable CORS
+  // Enable CORS & Security Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cookie');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -43,6 +45,15 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'POST') {
+      // Auth Check: Super Admin, Admin, or Staff roles only
+      const user = getSessionUser(req);
+      if (!user) {
+        return res.status(401).json({ success: false, message: 'Unauthorized. Please log in first.' });
+      }
+      if (!hasRole(user, [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.STAFF])) {
+        return res.status(403).json({ success: false, message: 'Forbidden. Admin or Staff privileges required.' });
+      }
+
       const { id, name, price, category, description, sizes, age_recommendation, image_url } = req.body;
 
       if (!id || !name || !price || !category) {
@@ -72,6 +83,8 @@ module.exports = async (req, res) => {
 
       if (error) throw error;
 
+      await logAudit(user.id, 'add_product', 'products', `Added/Updated product ID: ${id}`);
+
       return res.status(200).json({
         success: true,
         message: 'Product saved successfully',
@@ -80,6 +93,15 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'DELETE') {
+      // Auth Check: Super Admin, Admin, or Staff roles only
+      const user = getSessionUser(req);
+      if (!user) {
+        return res.status(401).json({ success: false, message: 'Unauthorized. Please log in first.' });
+      }
+      if (!hasRole(user, [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.STAFF])) {
+        return res.status(403).json({ success: false, message: 'Forbidden. Admin or Staff privileges required.' });
+      }
+
       const { id } = req.query;
 
       if (!id) {
@@ -95,6 +117,8 @@ module.exports = async (req, res) => {
         .eq('id', id);
 
       if (error) throw error;
+
+      await logAudit(user.id, 'delete_product', 'products', `Deleted product ID: ${id}`);
 
       return res.status(200).json({
         success: true,

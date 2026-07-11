@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard | ToyOraKids</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Unique Dashboard Styling matching the Linear Design Vibe */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+    .db-sidebar {
+      background: rgba(13, 13, 17, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    .db-user-info {
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1.5rem;
+    }
+    .db-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #FFB74D);
+      color: #050506;
+      font-size: 2.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 0 20px rgba(230, 126, 34, 0.25);
+    }
+    .db-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--foreground);
+      margin-bottom: 0.25rem;
+    }
+    .db-role-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(230, 126, 34, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .db-menu-btn {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--foreground-muted);
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+    }
+    .db-menu-btn i {
+      width: 20px;
+      font-size: 1.1rem;
+    }
+    .db-menu-btn:hover, .db-menu-btn.active {
+      color: var(--foreground);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .db-menu-btn.active {
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+    }
+    .db-content-card {
+      background: rgba(13, 13, 17, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2.5rem;
+      min-height: 450px;
+    }
+    .db-tab-pane {
+      display: none;
+    }
+    .db-tab-pane.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    .order-card {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(5, 5, 6, 0.3);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: border 0.3s ease;
+    }
+    .order-card:hover {
+      border-color: rgba(230, 126, 34, 0.2);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .order-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+    }
+    .badge-status {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-pending { background: rgba(241, 196, 15, 0.15); color: #F1C40F; }
+    .badge-delivered { background: rgba(46, 204, 113, 0.15); color: #2ECC71; }
+    .badge-cancelled { background: rgba(231, 76, 60, 0.15); color: #E74C3C; }
+
+    @media (max-width: 900px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      .db-sidebar {
+        position: relative;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        ToyOraKids <span class="logo-dot"></span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="View Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-badge" style="display: none;">0</span>
+        </a>
+        <button class="icon-btn cart-toggle-btn" title="Open Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-badge" style="display: none;">0</span>
+        </button>
+        <button class="icon-btn mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN BODY -->
+  <section class="section" style="border-top: none; padding-top: 3rem;">
+    <div class="container">
+      <div id="alert-container"></div>
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="label-mono">Customer Account</span>
+        <h1 class="display-title" style="font-size: 3rem; margin-bottom: 0.5rem;" id="welcome-title">My Account</h1>
+        <p class="text-muted">Manage your profile, change your credentials, and view your order log history.</p>
+      </div>
+
+      <!-- PASSWORD RESET MODAL/FORM (IF RESET PARAM IS PRESENT) -->
+      <div id="reset-password-section" class="spotlight-card" style="display: none; padding: 2.5rem; margin-bottom: 2rem; border-color: var(--accent);">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-key" style="color: var(--accent); margin-right: 0.5rem;"></i> Reset Your Password</h3>
+        <p class="text-muted" style="margin-bottom: 1.5rem;">Please enter your new password below.</p>
+        <form id="reset-password-form" style="max-width: 500px;">
+          <div class="form-group">
+            <label class="form-label" for="reset-new-password">New Password *</label>
+            <input type="password" id="reset-new-password" class="form-control" placeholder="Min 8 characters" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label class="form-label" for="reset-confirm-password">Confirm Password *</label>
+            <input type="password" id="reset-confirm-password" class="form-control" placeholder="Confirm new password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+      </div>
+
+      <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="db-sidebar">
+          <div class="db-user-info">
+            <div class="db-avatar" id="avatar-circle">-</div>
+            <div class="db-name" id="profile-display-name">Loading...</div>
+            <span class="db-role-badge" id="profile-display-role">Customer</span>
+          </div>
+          
+          <nav>
+            <button class="db-menu-btn active" data-target="pane-profile">
+              <i class="far fa-user"></i> Profile Settings
+            </button>
+            <button class="db-menu-btn" data-target="pane-orders">
+              <i class="fas fa-history"></i> Order History
+            </button>
+            <button class="db-menu-btn" data-target="pane-wishlist">
+              <i class="far fa-heart"></i> My Wishlist
+            </button>
+            <button class="db-menu-btn" id="admin-panel-link" style="display: none;" onclick="window.location.href='admin.html'">
+              <i class="fas fa-cog"></i> Go to Admin Panel
+            </button>
+            <button class="db-menu-btn" onclick="logoutSession()" style="margin-top: 1.5rem; color: #E74C3C;">
+              <i class="fas fa-sign-out-alt"></i> Sign Out
+            </button>
+          </nav>
+        </aside>
+
+        <!-- Main Content Pane -->
+        <main class="db-content-card">
+          
+          <!-- TAB 1: PROFILE SETTINGS -->
+          <div class="db-tab-pane active" id="pane-profile">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 2.5rem;">
+              
+              <!-- Profile Info Form -->
+              <div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--foreground);">Update Account Profile</h3>
+                <form id="update-profile-form">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                      <label class="form-label" for="profile-name">Full Name *</label>
+                      <input type="text" id="profile-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="profile-email">Email Address *</label>
+                      <input type="email" id="profile-email" class="form-control" required>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Settings</button>
+                </form>
+              </div>
+              
+              <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+              
+              <!-- Change Password Form -->
+              <div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--foreground);">Change Account Password</h3>
+                <form id="change-password-form" style="max-width: 500px;">
+                  <div class="form-group">
+                    <label class="form-label" for="old-password">Current Password *</label>
+                    <input type="password" id="old-password" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="new-password">New Password *</label>
+                    <input type="password" id="new-password" class="form-control" placeholder="Min 8 characters" required>
+                  </div>
+                  <button type="submit" class="btn btn-secondary" style="margin-top: 1rem;">Update Password</button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 2: ORDER HISTORY -->
+          <div class="db-tab-pane" id="pane-orders">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--foreground);">My Order Log History</h3>
+            <div id="orders-container">
+              <p class="text-muted">Loading order records...</p>
+            </div>
+          </div>
+
+          <!-- TAB 3: WISHLIST -->
+          <div class="db-tab-pane" id="pane-wishlist">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--foreground);">My Saved Products</h3>
+            <div class="product-grid" id="db-wishlist-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem;">
+              <p class="text-muted">Loading wishlist favorites...</p>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">ToyOraKids <span class="logo-dot"></span></a>
+          <p class="text-muted" style="font-size: 0.85rem; max-width: 250px;">Premium children's garments and Montessori toys designed to provide comfort, style, and developmental growth.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="shop.html">Shop All</a></li>
+            <li><a href="shop.html?category=garment">Garments</a></li>
+            <li><a href="shop.html?category=toy">Developmental Toys</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Admin Portal</h4>
+          <ul>
+            <li><a href="admin.html">Dashboard Login</a></li>
+            <li><a href="admin.html">Manage Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support & Contact</h4>
+          <ul>
+            <li><a href="https://wa.me/923001234567" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 0.4rem;"></i>0300-1234567</a></li>
+            <li><a href="mailto:support@toyorakids.com"><i class="far fa-envelope" style="margin-right: 0.4rem;"></i>support@toyorakids.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ToyOraKids. All rights reserved. Crafted with the Linear design system.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS SCRIPTS -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Manage tab clicks
+      const tabBtns = document.querySelectorAll('.db-menu-btn[data-target]');
+      const tabPanes = document.querySelectorAll('.db-tab-pane');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabPanes.forEach(p => p.classList.remove('active'));
+          
+          btn.classList.add('active');
+          const target = btn.dataset.target;
+          document.getElementById(target).classList.add('active');
+          
+          if (target === 'pane-orders') {
+            loadOrderHistory();
+          } else if (target === 'pane-wishlist') {
+            loadWishlistFavorites();
+          }
+        });
+      });
+
+      // 2. Run session validation & initialization
+      checkUserSession();
+      processUrlParameters();
+    });
+
+    let currentSessionUser = null;
+
+    // Validate active session
+    async function checkUserSession() {
+      try {
+        const res = await fetch('/api/auth/session');
+        const data = await res.json();
+        
+        if (data.success && data.loggedIn) {
+          currentSessionUser = data.user;
+          setupProfileView(data.user);
+        } else {
+          // Redirect to index and prompt login if not authenticated
+          showAlert('Please sign in to access your dashboard.', 'error');
+          setTimeout(() => {
+            window.location.href = 'index.html?prompt_login=true';
+          }, 1500);
+        }
+      } catch (err) {
+        console.error('Session check failed:', err);
+      }
+    }
+
+    // Set UI values
+    function setupProfileView(user) {
+      document.getElementById('welcome-title').textContent = `Hello, ${user.name.split(' ')[0]}!`;
+      document.getElementById('profile-display-name').textContent = user.name;
+      document.getElementById('profile-display-role').textContent = user.role;
+      document.getElementById('avatar-circle').textContent = user.name.charAt(0).toUpperCase();
+
+      document.getElementById('profile-name').value = user.name;
+      document.getElementById('profile-email').value = user.email;
+
+      // Show Admin Dashboard link for Admin/Super Admin/Staff
+      const adminRoles = ['Super Admin', 'Admin', 'Staff'];
+      if (adminRoles.includes(user.role)) {
+        document.getElementById('admin-panel-link').style.display = 'flex';
+      }
+    }
+
+    // Handle Url Verification & Reset Password triggers
+    async function processUrlParameters() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const verifyToken = urlParams.get('verify');
+      const resetToken = urlParams.get('reset');
+
+      if (verifyToken) {
+        try {
+          const res = await fetch(`/api/auth/verify-email?token=${verifyToken}`);
+          const data = await res.json();
+          if (data.success) {
+            showAlert(data.message, 'success');
+          } else {
+            showAlert(data.message, 'error');
+          }
+        } catch (err) {
+          showAlert('Failed to process email verification.', 'error');
+        }
+      }
+
+      if (resetToken) {
+        // Display password reset section
+        document.getElementById('reset-password-section').style.display = 'block';
+        document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const newPassword = document.getElementById('reset-new-password').value;
+          const confirmPassword = document.getElementById('reset-confirm-password').value;
+
+          if (newPassword !== confirmPassword) {
+            showAlert('Passwords do not match.', 'error');
+            return;
+          }
+
+          try {
+            const res = await fetch('/api/auth/reset-password', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: resetToken, password: newPassword })
+            });
+            const data = await res.json();
+            if (data.success) {
+              showAlert(data.message, 'success');
+              document.getElementById('reset-password-section').style.display = 'none';
+            } else {
+              showAlert(data.message, 'error');
+            }
+          } catch (err) {
+            showAlert('Error resetting password.', 'error');
+          }
+        });
+      }
+    }
+
+    // Update Profile Info
+    document.getElementById('update-profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('profile-name').value;
+      const email = document.getElementById('profile-email').value;
+
+      try {
+        const res = await fetch('/api/auth/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          showAlert(data.message, 'success');
+          checkUserSession(); // Reload
+        } else {
+          showAlert(data.message, 'error');
+        }
+      } catch (err) {
+        showAlert('Failed to update profile.', 'error');
+      }
+    });
+
+    // Change Password Form
+    document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const oldPassword = document.getElementById('old-password').value;
+      const newPassword = document.getElementById('new-password').value;
+
+      try {
+        const res = await fetch('/api/auth/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ oldPassword, newPassword })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          showAlert(data.message, 'success');
+          document.getElementById('change-password-form').reset();
+        } else {
+          showAlert(data.message, 'error');
+        }
+      } catch (err) {
+        showAlert('Failed to change password.', 'error');
+      }
+    });
+
+    // Load user orders history
+    async function loadOrderHistory() {
+      const container = document.getElementById('orders-container');
+      try {
+        const res = await fetch('/api/orders');
+        const data = await res.json();
+
+        if (data.success && data.orders.length > 0) {
+          let html = '';
+          data.orders.forEach(order => {
+            const dateStr = new Date(order.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' });
+            const itemsList = order.items;
+            
+            let itemHtml = '';
+            itemsList.forEach(item => {
+              itemHtml += `
+                <div class="order-item-row">
+                  <div>${item.name} <span class="text-muted">(${item.selectedSize})</span> × ${item.quantity}</div>
+                  <div>Rs. ${(item.price * item.quantity).toLocaleString()}</div>
+                </div>
+              `;
+            });
+
+            html += `
+              <div class="order-card">
+                <div class="order-header">
+                  <div>Order Reference ID: <span style="color:var(--accent); font-weight:600;">tok-${order.id.slice(0, 8)}</span></div>
+                  <div>Date: ${dateStr}</div>
+                  <div><span class="badge-status badge-pending">${order.status}</span></div>
+                </div>
+                <div class="order-items">
+                  ${itemHtml}
+                </div>
+                <div class="order-footer">
+                  <div>Grand Total:</div>
+                  <div style="color:var(--accent); font-size:1.1rem;">Rs. ${order.total_amount.toLocaleString()}</div>
+                </div>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        } else {
+          container.innerHTML = `<p class="text-muted">You haven't placed any orders yet.</p>`;
+        }
+      } catch (err) {
+        container.innerHTML = `<p class="text-muted" style="color:#E74C3C;">Failed to load order history.</p>`;
+      }
+    }
+
+    // Load customer favorites
+    async function loadWishlistFavorites() {
+      const grid = document.getElementById('db-wishlist-grid');
+      try {
+        const res = await fetch('/api/wishlist');
+        const data = await res.json();
+
+        if (data.success && data.wishlist.length > 0) {
+          const favoriteProducts = products.filter(p => data.wishlist.includes(p.id));
+          
+          if (favoriteProducts.length === 0) {
+            grid.innerHTML = '<p class="text-muted">No wishlist items found.</p>';
+            return;
+          }
+
+          let html = '';
+          favoriteProducts.forEach(product => {
+            html += `
+              <div class="spotlight-card product-card" style="margin: 0;">
+                <div class="product-card-img-wrapper" style="height: 180px;">
+                  <img src="${product.image_url}" alt="${product.name}" class="product-card-img">
+                </div>
+                <div class="product-card-info" style="padding: 1rem;">
+                  <a href="product-detail.html?id=${product.id}" class="product-card-title" style="font-size: 0.95rem; margin-bottom: 0.5rem;">${product.name}</a>
+                  <div class="product-card-bottom" style="margin-top: 0.5rem;">
+                    <span class="product-card-price" style="font-size: 0.9rem;">Rs. ${product.price.toLocaleString()}</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('${product.id}', '${product.sizes.split(',')[0]}', 1)" style="padding: 4px 8px; font-size: 0.75rem;">
+                      + Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          grid.innerHTML = html;
+        } else {
+          grid.innerHTML = `<p class="text-muted">Your wishlist is empty.</p>`;
+        }
+      } catch (err) {
+        grid.innerHTML = `<p class="text-muted" style="color:#E74C3C;">Failed to load wishlist items.</p>`;
+      }
+    }
+
+    // Log out
+    async function logoutSession() {
+      try {
+        const res = await fetch('/api/auth/logout', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          window.location.href = 'index.html';
+        }
+      } catch (err) {
+        console.error('Logout request failed:', err);
+      }
+    }
+
+    // Alert helper
+    function showAlert(message, type) {
+      const container = document.getElementById('alert-container');
+      const alert = document.createElement('div');
+      alert.className = `spotlight-card`;
+      alert.style.padding = '1rem 1.5rem';
+      alert.style.marginBottom = '1.5rem';
+      alert.style.borderLeft = `4px solid ${type === 'success' ? '#2ECC71' : '#E74C3C'}`;
+      alert.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:600;"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="color:${type === 'success' ? '#2ECC71' : '#E74C3C'}; margin-right: 0.5rem;"></i> ${message}</div>
+          <button onclick="this.parentElement.parentElement.remove()" style="background:transparent; border:none; color:var(--foreground-muted); cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+      `;
+      container.appendChild(alert);
+      setTimeout(() => alert.remove(), 5000);
+    }
+  </script>
+</body>
+</html>

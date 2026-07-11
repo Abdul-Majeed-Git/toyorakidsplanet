@@ -813,31 +813,14 @@ function processWhatsAppCheckout() {
 
 // --- ADMIN PANEL INITIALIZATION ---
 function initAdminPage() {
-  const loginOverlay = document.getElementById('admin-login-overlay');
-  const loginForm = document.getElementById('admin-login-form');
+  // NOTE: Admin login/session is now handled by the secure JWT system
+  // in the <script> block inside admin.html (calls /api/auth/login & /api/auth/session).
+  // The old hardcoded 'admin123' passcode has been permanently removed.
+
   const addProductForm = document.getElementById('admin-add-product-form');
   const uploadArea = document.getElementById('admin-upload-area');
   const imageFileInput = document.getElementById('admin-image-file');
   const previewImg = document.getElementById('admin-preview-img');
-  
-  // Authentication check (mock session)
-  const isAdminLoggedIn = sessionStorage.getItem('toyorakids_admin_session') === 'true';
-  if (isAdminLoggedIn && loginOverlay) {
-    loginOverlay.style.display = 'none';
-  }
-
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const password = document.getElementById('admin-password').value;
-      if (password === 'admin123') { // Mock admin password
-        sessionStorage.setItem('toyorakids_admin_session', 'true');
-        loginOverlay.style.display = 'none';
-      } else {
-        alert('Incorrect admin password. Use "admin123" to access.');
-      }
-    });
-  }
 
   // Image Upload Handling (Local File -> Base64 data URL)
   let base64Image = '';

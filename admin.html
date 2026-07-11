@@ -10,21 +10,30 @@
 </head>
 <body>
 
-  <!-- ADMIN PASSCODE OVERLAY -->
+  <!-- ADMIN SECURE LOGIN OVERLAY -->
   <div class="admin-login-overlay" id="admin-login-overlay">
     <div class="spotlight-card admin-login-card">
       <div style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;">
-        <i class="fas fa-lock"></i>
+        <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 class="section-title" style="font-size: 1.75rem; text-align: center; margin-bottom: 0.5rem;">Admin Verification</h2>
-      <p class="text-muted" style="text-align: center; margin-bottom: 1.5rem;">Access restricted to store managers. Enter password to continue.</p>
-      
+      <h2 class="section-title" style="font-size: 1.75rem; text-align: center; margin-bottom: 0.5rem;">Admin Portal</h2>
+      <p class="text-muted" style="text-align: center; margin-bottom: 1.5rem;">Access restricted to store managers, admins, and staff only.</p>
+
+      <div id="admin-login-alert" style="margin-bottom:1rem;"></div>
+
       <form id="admin-login-form">
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label" for="admin-password">Enter Password *</label>
-          <input type="password" id="admin-password" class="form-control" placeholder="Password (Use: admin123)" required>
+        <div class="form-group">
+          <label class="form-label" for="admin-email">Email Address *</label>
+          <input type="email" id="admin-email" class="form-control" placeholder="admin@toyorakids.com" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-full">Unlock Dashboard</button>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="admin-password">Password *</label>
+          <input type="password" id="admin-password" class="form-control" placeholder="Your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="admin-login-btn">Access Dashboard</button>
+        <div style="text-align:center;margin-top:1rem;">
+          <a href="index.html" style="font-size:0.85rem;color:var(--foreground-muted);">← Back to Store</a>
+        </div>
       </form>
     </div>
   </div>
@@ -66,6 +75,10 @@
           <span class="label-mono">Store Operations</span>
           <h1 class="display-title" style="font-size: 3rem; margin-bottom: 0.5rem;">Manager Dashboard</h1>
           <p class="text-muted">Manage your inventory, edit store content, publish blog posts, and view visitor analytics.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;">
+          <span id="admin-user-badge" style="font-size:0.8rem;padding:4px 12px;border-radius:4px;background:rgba(230,126,34,0.15);color:var(--accent);"></span>
+          <button class="btn btn-secondary btn-sm" onclick="adminLogout()" style="font-size:0.85rem;"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
         </div>
       </div>
 
@@ -395,6 +408,111 @@
 
   <script src="js/products.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/auth.js"></script>
+  <script>
+    // ─── ADMIN PORTAL SECURE SESSION GUARD ───────────────────────────────────────
+    (async function adminGuard() {
+      const overlay = document.getElementById('admin-login-overlay');
+
+      try {
+        const res  = await fetch('/api/auth/session', { credentials: 'include' });
+        const data = await res.json();
+
+        const allowedRoles = ['Super Admin', 'Admin', 'Staff'];
+
+        if (data.success && data.loggedIn && allowedRoles.includes(data.user.role)) {
+          // Authenticated admin/staff — hide overlay, show dashboard
+          overlay.style.display = 'none';
+          applyRoleVisibility(data.user);
+        } else {
+          // Not authenticated — show login form
+          overlay.style.display = 'flex';
+          setupAdminLoginForm();
+        }
+      } catch (_) {
+        overlay.style.display = 'flex';
+        setupAdminLoginForm();
+      }
+    })();
+
+    function applyRoleVisibility(user) {
+      // Update badge
+      const badge = document.getElementById('admin-user-badge');
+      if (badge) badge.textContent = `${user.name} · ${user.role}`;
+
+      // Staff can only see Products tab — hide other tabs
+      if (user.role === 'Staff') {
+        const restrictedTargets = ['tab-about', 'tab-blog', 'tab-visits', 'tab-stats'];
+        document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+          if (restrictedTargets.includes(btn.dataset.target)) {
+            btn.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    function setupAdminLoginForm() {
+      const form    = document.getElementById('admin-login-form');
+      const alertEl = document.getElementById('admin-login-alert');
+      const overlay = document.getElementById('admin-login-overlay');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email    = document.getElementById('admin-email').value;
+        const password = document.getElementById('admin-password').value;
+        const btn      = document.getElementById('admin-login-btn');
+
+        btn.disabled    = true;
+        btn.textContent = 'Verifying...';
+        alertEl.innerHTML = '';
+
+        try {
+          const res  = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+
+          const allowedRoles = ['Super Admin', 'Admin', 'Staff'];
+
+          if (data.success && allowedRoles.includes(data.user.role)) {
+            overlay.style.display = 'none';
+            applyRoleVisibility(data.user);
+          } else if (data.success && !allowedRoles.includes(data.user.role)) {
+            // Customer logged in — redirect to customer dashboard
+            alertEl.innerHTML = setAdminAlert('Your account does not have admin permissions. Redirecting...', 'error');
+            setTimeout(() => { window.location.href = 'customer.html'; }, 1800);
+          } else {
+            alertEl.innerHTML = setAdminAlert(data.message, 'error');
+            btn.disabled    = false;
+            btn.textContent = 'Access Dashboard';
+          }
+        } catch (_) {
+          alertEl.innerHTML = setAdminAlert('Network error. Please try again.', 'error');
+          btn.disabled    = false;
+          btn.textContent = 'Access Dashboard';
+        }
+      });
+    }
+
+    function setAdminAlert(message, type) {
+      return `<div style="padding:0.75rem 1rem;border-radius:6px;font-size:0.85rem;
+        background:${type==='success'?'rgba(46,204,113,0.1)':'rgba(231,76,60,0.1)'};
+        border-left:3px solid ${type==='success'?'#2ECC71':'#E74C3C'};
+        color:${type==='success'?'#2ECC71':'#E74C3C'};">
+        ${message}
+      </div>`;
+    }
+
+    async function adminLogout() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      } catch (_) {}
+      window.location.reload();
+    }
+  </script>
 </body>
 </html>
